@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculator</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(to right, #4facfe, #00f2fe);
+    }
+    .calculator {
+        background: #222;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+    .display {
+        width: 100%;
+        height: 50px;
+        background: #000;
+        color: #0f0;
+        text-align: right;
+        padding: 10px;
+        font-size: 2em;
+        border-radius: 10px;
+        overflow-x: auto;
+    }
+    button {
+        width: 70px;
+        height: 70px;
+        margin: 5px;
+        font-size: 1.5em;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        background: #444;
+        color: white;
+        transition: background 0.3s;
+    }
+    button:hover {
+        background: #666;
+    }
+    .btn-operator {
+        background: #ff9500;
+    }
+    .btn-equal {
+        background: #28a745;
+    }
+    .btn-clear {
+        background: #dc3545;
+    }
+</style>
+</head>
+<body>
+
+<div class="calculator">
+    <div id="display" class="display">0</div>
+    <div>
+        <button class="btn-clear">C</button>
+        <button class="btn-operator">/</button>
+        <button class="btn-operator">*</button>
+        <button class="btn-operator">-</button>
+    </div>
+    <div>
+        <button>7</button>
+        <button>8</button>
+        <button>9</button>
+        <button class="btn-operator">+</button>
+    </div>
+    <div>
+        <button>4</button>
+        <button>5</button>
+        <button>6</button>
+        <button class="btn-equal">=</button>
+    </div>
+    <div>
+        <button>1</button>
+        <button>2</button>
+        <button>3</button>
+        <button>0</button>
+    </div>
+    <div>
+        <button>.</button>
+    </div>
+</div>
+
+<script>
+    const display = document.getElementById("display");
+    let currentInput = "";
+
+    // Function to update display
+    function updateDisplay(value) {
+        display.textContent = value || "0";
+    }
+
+    // Handle button clicks
+    document.querySelectorAll("button").forEach(button => {
+        button.addEventListener("click", () => {
+            const value = button.textContent;
+
+            if (value === "C") {
+                currentInput = "";
+                updateDisplay("");
+            }
+            else if (value === "=") {
+                try {
+                    currentInput = eval(currentInput).toString();
+                    updateDisplay(currentInput);
+                } catch {
+                    updateDisplay("Error");
+                    currentInput = "";
+                }
+            }
+            else {
+                currentInput += value;
+                updateDisplay(currentInput);
+            }
+        });
+    });
+
+    // Handle keyboard input
+    document.addEventListener("keydown", (event) => {
+        if ((/[0-9+\-*/.]/).test(event.key)) {
+            currentInput += event.key;
+            updateDisplay(currentInput);
+        }
+        else if (event.key === "Enter") {
+            try {
+                currentInput = eval(currentInput).toString();
+                updateDisplay(currentInput);
+            } catch {
+                updateDisplay("Error");
+                currentInput = "";
+            }
+        }
+        else if (event.key === "Backspace") {
+            currentInput = currentInput.slice(0, -1);
+            updateDisplay(currentInput);
+        }
+        else if (event.key.toLowerCase() === "c") {
+            currentInput = "";
+            updateDisplay("");
+        }
+    });
+</script>
+
+</body>
+</html>
